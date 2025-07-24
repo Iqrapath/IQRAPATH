@@ -7,13 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useInitials } from '@/hooks/use-initials';
 import { formatAvatarUrl } from '@/lib/helpers';
-<<<<<<< HEAD
-import { MoreVertical, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Home } from 'lucide-react';
-import ComingSoonModal from '@/components/ui/coming-soon-modal';
-import { AddTeacherFlow } from '@/components/dashboard/add-teacher-flow';
-=======
 import { MoreVertical, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
->>>>>>> a27505c68686d606cd7863d0cd73ed8724ccd717
 import { 
   DropdownMenu, 
   DropdownMenuContent, 
@@ -24,10 +18,6 @@ import {
   DropdownMenuSubContent
 } from '@/components/ui/dropdown-menu';
 import { useToast } from '@/components/ui/use-toast';
-<<<<<<< HEAD
-import { Breadcrumbs } from '@/components/breadcrumbs';
-=======
->>>>>>> a27505c68686d606cd7863d0cd73ed8724ccd717
 
 interface Teacher {
   id: number;
@@ -38,11 +28,7 @@ interface Teacher {
   rating: number;
   classesHeld: number;
   status: string;
-<<<<<<< HEAD
   subjects?: Array<{id: number, name: string, is_active?: boolean, pivot?: {is_primary: boolean}}> | string[];
-=======
-  subjects?: string[];
->>>>>>> a27505c68686d606cd7863d0cd73ed8724ccd717
 }
 
 interface Pagination {
@@ -84,18 +70,13 @@ export default function TeacherManagement({
   const [statusFilter, setStatusFilter] = useState(filters?.status || 'all');
   const [teachingSubjectFilter, setTeachingSubjectFilter] = useState(filters?.teaching_subject || 'all');
   const [ratingFilter, setRatingFilter] = useState(filters?.rating || 'all');
-<<<<<<< HEAD
-  
+  const getInitials = useInitials();
+  const { toast } = useToast();
+
   // Update teachers when initialTeachers changes (e.g., after search/filter)
   useEffect(() => {
     setTeachers(initialTeachers || []);
   }, [initialTeachers]);
-  const [isComingSoonModalOpen, setIsComingSoonModalOpen] = useState(false);
-  const [comingSoonFeature, setComingSoonFeature] = useState<string>('');
-=======
->>>>>>> a27505c68686d606cd7863d0cd73ed8724ccd717
-  const getInitials = useInitials();
-  const { toast } = useToast();
 
   // Show flash messages
   useEffect(() => {
@@ -157,27 +138,20 @@ export default function TeacherManagement({
   // Handle status update
   const handleUpdateStatus = (teacherId: number, status: string) => {
     setLoading(true);
-    
-    // Find the current teacher and their status
     const teacher = teachers.find(t => t.id === teacherId);
     const previousStatus = teacher ? teacher.status : '';
-    
     router.post(`/admin/teachers/${teacherId}/status`, { status }, {
       onSuccess: () => {
-        // Update local state to reflect the status change immediately
         setTeachers(prevTeachers => 
           prevTeachers.map(teacher => 
             teacher.id === teacherId ? { ...teacher, status: status.charAt(0).toUpperCase() + status.slice(1) } : teacher
           )
         );
-        
-        // Show toast with status change information
         toast({
           title: "Status Updated",
           description: `${teacher?.name}'s status changed from ${previousStatus} to ${status.charAt(0).toUpperCase() + status.slice(1)}`,
           variant: "success",
         });
-        
         setLoading(false);
       },
       onError: (errors) => {
@@ -198,23 +172,15 @@ export default function TeacherManagement({
 
   // Handle search form submission
   const handleSearch = () => {
-<<<<<<< HEAD
-    // Reset to page 1 when searching to ensure results are found
-=======
->>>>>>> a27505c68686d606cd7863d0cd73ed8724ccd717
     router.get('/admin/teachers', {
       search: searchQuery,
       status: statusFilter,
       teaching_subject: teachingSubjectFilter,
-<<<<<<< HEAD
       rating: ratingFilter,
       page: 1 // Always start from page 1 when searching
     }, {
-      preserveState: true, // Preserve component state when navigating
-      only: ['teachers', 'pagination', 'filters'] // Only update these data
-=======
-      rating: ratingFilter
->>>>>>> a27505c68686d606cd7863d0cd73ed8724ccd717
+      preserveState: true,
+      only: ['teachers', 'pagination', 'filters']
     });
   };
 
@@ -226,12 +192,9 @@ export default function TeacherManagement({
       teaching_subject: teachingSubjectFilter,
       rating: ratingFilter,
       page
-<<<<<<< HEAD
     }, {
-      preserveState: true, // Preserve component state when navigating
-      only: ['teachers', 'pagination'] // Only update these data
-=======
->>>>>>> a27505c68686d606cd7863d0cd73ed8724ccd717
+      preserveState: true,
+      only: ['teachers', 'pagination']
     });
   };
 
@@ -240,73 +203,26 @@ export default function TeacherManagement({
     const totalPages = pagination.lastPage;
     const currentPage = pagination.currentPage;
     const range = [];
-    
-    // Always show first page
     range.push(1);
-    
-    // Calculate start and end of pagination range
     let start = Math.max(2, currentPage - 1);
     let end = Math.min(totalPages - 1, currentPage + 1);
-    
-    // Add ellipsis after first page if needed
     if (start > 2) {
       range.push('ellipsis1');
     }
-    
-    // Add pages in the middle
     for (let i = start; i <= end; i++) {
       range.push(i);
     }
-    
-    // Add ellipsis before last page if needed
     if (end < totalPages - 1) {
       range.push('ellipsis2');
     }
-    
-    // Add last page if there is more than one page
     if (totalPages > 1) {
       range.push(totalPages);
     }
-    
     return range;
   };
 
-<<<<<<< HEAD
-  // We no longer need to filter teachers in the component since filtering is handled by the server
-  // This ensures search works across all pages of results
+  // Filtering is handled by the server, so just use teachers from state
   const filteredTeachers = teachers;
-=======
-  const filteredTeachers = teachers.filter(teacher => {
-    // Apply search filter
-    if (searchQuery && !teacher.name.toLowerCase().includes(searchQuery.toLowerCase()) && 
-        !teacher.email.toLowerCase().includes(searchQuery.toLowerCase())) {
-      return false;
-    }
-    
-    // Apply status filter
-    if (statusFilter && statusFilter !== "all" && teacher.status !== statusFilter) {
-      return false;
-    }
-    
-    // Apply subject filter
-    if (teachingSubjectFilter && teachingSubjectFilter !== "all") {
-      const subjects = teacher.teaching_subjects || teacher.subjects || [];
-      if (!subjects.includes(teachingSubjectFilter)) {
-        return false;
-      }
-    }
-    
-    // Apply rating filter
-    if (ratingFilter && ratingFilter !== "all") {
-      const rating = parseFloat(ratingFilter);
-      if (teacher.rating < rating) {
-        return false;
-      }
-    }
-    
-    return true;
-  });
->>>>>>> a27505c68686d606cd7863d0cd73ed8724ccd717
 
   const getStatusClass = (status: string) => {
     switch (status) {
@@ -323,58 +239,16 @@ export default function TeacherManagement({
     }
   };
 
-<<<<<<< HEAD
-  const showComingSoonModal = (featureName: string) => {
-    setComingSoonFeature(featureName);
-    setIsComingSoonModalOpen(true);
-  };
-
-=======
->>>>>>> a27505c68686d606cd7863d0cd73ed8724ccd717
   return (
     <AdminLayout>
       <Head title="Teacher Management" />
-      
       <div className="py-6 px-6">
-<<<<<<< HEAD
-        <div className="flex items-center mb-6">
-          <div className="flex-1">
-            <Breadcrumbs 
-              breadcrumbs={[
-                { title: 'Dashboard', href: '/admin/dashboard' },
-                { title: 'Teacher Management' }
-              ]}
-            />
-          </div>
-        </div>
-        
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-semibold text-gray-800">Teacher Management</h1>
-          <AddTeacherFlow 
-            buttonVariant="primary"
-            buttonText="Add New Teacher"
-            buttonClassName="bg-teal-600 hover:bg-teal-700 text-white"
-            onTeacherAdded={(data) => {
-              toast({
-                title: "Success",
-                description: `${data.user.name} has been added as a new teacher.`,
-                variant: "success",
-              });
-              // Refresh the page to show the new teacher
-              setTimeout(() => {
-                router.reload();
-              }, 100);
-            }}
-          />
-=======
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-semibold text-gray-800">Teacher Management</h1>
           <Button className="bg-teal-600 hover:bg-teal-700">
             Add New Teachers
           </Button>
->>>>>>> a27505c68686d606cd7863d0cd73ed8724ccd717
         </div>
-        
         {/* Filters */}
         <div className="flex flex-wrap gap-3 mb-6">
           <div className="flex-1 min-w-[200px]">
@@ -385,7 +259,6 @@ export default function TeacherManagement({
               className="w-full"
             />
           </div>
-          
           <Select value={statusFilter} onValueChange={setStatusFilter}>
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Select Status" />
@@ -397,7 +270,6 @@ export default function TeacherManagement({
               ))}
             </SelectContent>
           </Select>
-          
           <Select value={teachingSubjectFilter} onValueChange={setTeachingSubjectFilter}>
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Select Subject" />
@@ -409,7 +281,6 @@ export default function TeacherManagement({
               ))}
             </SelectContent>
           </Select>
-          
           <Select value={ratingFilter} onValueChange={setRatingFilter}>
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Rating" />
@@ -421,12 +292,10 @@ export default function TeacherManagement({
               ))}
             </SelectContent>
           </Select>
-          
           <Button variant="outline" className="px-4" onClick={handleSearch}>
             Search
           </Button>
         </div>
-        
         {/* Teachers Table */}
         <div className="bg-white rounded-lg shadow overflow-hidden">
           <div className="overflow-x-auto">
@@ -477,20 +346,15 @@ export default function TeacherManagement({
                     <tr key={teacher.id}>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <Avatar className="h-10 w-10">
-<<<<<<< HEAD
                           {teacher.avatar ? (
                             <AvatarImage 
                               src={formatAvatarUrl(teacher.avatar)} 
                               alt={teacher.name} 
                               onError={() => {
                                 // Let fallback handle it
-                                console.log(`Failed to load avatar for ${teacher.name}`);
                               }}
                             />
                           ) : null}
-=======
-                          <AvatarImage src={teacher.avatar} alt={teacher.name} />
->>>>>>> a27505c68686d606cd7863d0cd73ed8724ccd717
                           <AvatarFallback>{getInitials(teacher.name)}</AvatarFallback>
                         </Avatar>
                       </td>
@@ -501,16 +365,9 @@ export default function TeacherManagement({
                         <div className="text-sm text-gray-500">{teacher.email}</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-<<<<<<< HEAD
                         <div className="text-sm text-gray-900">
                           {(() => {
-                            // Debug the subjects data (more concise)
-                            console.log(`Teacher ${teacher.id} (${teacher.name}) subjects:`, 
-                              teacher.teaching_subjects || []);
-                            
-                            // Use teaching_subjects which is already formatted as an array of strings
                             const subjects = Array.isArray(teacher.teaching_subjects) ? teacher.teaching_subjects : [];
-                            
                             if (subjects.length === 0) {
                               return 'None';
                             } else if (subjects.length <= 2) {
@@ -520,9 +377,6 @@ export default function TeacherManagement({
                             }
                           })()}
                         </div>
-=======
-                        <div className="text-sm text-gray-900">{(teacher.teaching_subjects || teacher.subjects || []).join(', ')}</div>
->>>>>>> a27505c68686d606cd7863d0cd73ed8724ccd717
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
@@ -560,7 +414,6 @@ export default function TeacherManagement({
                                 </svg>
                               </div>
                             </DropdownMenuItem>
-                            
                             {/* Status Update */}
                             <DropdownMenuSub>
                               <DropdownMenuSubTrigger className="flex items-center justify-between p-2 cursor-pointer">
@@ -587,15 +440,10 @@ export default function TeacherManagement({
                                 ))}
                               </DropdownMenuSubContent>
                             </DropdownMenuSub>
-                            
                             {/* Other Actions */}
                             <DropdownMenuItem 
                               className="flex items-center justify-between p-2 cursor-pointer"
-<<<<<<< HEAD
-                              onClick={() => showComingSoonModal('Edit Profile')}
-=======
                               onClick={() => window.location.href = `/admin/teachers/${teacher.id}/edit`}
->>>>>>> a27505c68686d606cd7863d0cd73ed8724ccd717
                             >
                               <span>Edit Profile</span>
                               <div className="flex h-5 w-5 items-center justify-center">
@@ -604,7 +452,6 @@ export default function TeacherManagement({
                                 </svg>
                               </div>
                             </DropdownMenuItem>
-                            
                             <DropdownMenuItem 
                               className="flex items-center justify-between p-2 cursor-pointer"
                               onClick={() => handleViewProfile(teacher.id)}
@@ -617,28 +464,17 @@ export default function TeacherManagement({
                                 </svg>
                               </div>
                             </DropdownMenuItem>
-                            
                             <DropdownMenuItem 
                               className="flex items-center justify-between p-2 cursor-pointer"
-<<<<<<< HEAD
-                              onClick={() => showComingSoonModal('View Performance')}
-=======
                               onClick={() => window.location.href = `/admin/teachers/${teacher.id}/performance`}
->>>>>>> a27505c68686d606cd7863d0cd73ed8724ccd717
                             >
                               <span>View Performance</span>
                               <div className="flex h-5 w-5 items-center justify-center">
                                 <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-<<<<<<< HEAD
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-=======
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
->>>>>>> a27505c68686d606cd7863d0cd73ed8724ccd717
                                 </svg>
                               </div>
                             </DropdownMenuItem>
-
                              <DropdownMenuItem 
                               className="flex items-center justify-between p-2 cursor-pointer text-red-600"
                               onClick={() => handleRejectTeacher(teacher.id)}
@@ -660,7 +496,6 @@ export default function TeacherManagement({
             </table>
           </div>
         </div>
-        
         {/* Pagination */}
         {pagination && pagination.total > 0 && (
           <div className="mt-4 flex flex-col sm:flex-row justify-between items-center gap-4">
@@ -678,7 +513,6 @@ export default function TeacherManagement({
               >
                 <ChevronsLeft className="h-4 w-4" />
               </Button>
-              
               {/* Previous Page */}
               <Button
                 variant="outline"
@@ -689,7 +523,6 @@ export default function TeacherManagement({
               >
                 <ChevronLeft className="h-4 w-4" />
               </Button>
-              
               {/* Page Numbers */}
               {getPaginationRange().map((page, index) => (
                 page === 'ellipsis1' || page === 'ellipsis2' ? (
@@ -705,7 +538,6 @@ export default function TeacherManagement({
                   </Button>
                 )
               ))}
-              
               {/* Next Page */}
               <Button
                 variant="outline"
@@ -716,7 +548,6 @@ export default function TeacherManagement({
               >
                 <ChevronRight className="h-4 w-4" />
               </Button>
-              
               {/* Last Page */}
               <Button
                 variant="outline"
@@ -730,18 +561,7 @@ export default function TeacherManagement({
             </div>
           </div>
         )}
-<<<<<<< HEAD
-
-        {/* Coming Soon Modal */}
-        <ComingSoonModal 
-          isOpen={isComingSoonModalOpen}
-          onClose={() => setIsComingSoonModalOpen(false)}
-          featureName={comingSoonFeature}
-          description={`The "${comingSoonFeature}" feature is currently under development and will be available soon. Thank you for your patience!`}
-        />
-=======
->>>>>>> a27505c68686d606cd7863d0cd73ed8724ccd717
       </div>
     </AdminLayout>
   );
-} 
+}
