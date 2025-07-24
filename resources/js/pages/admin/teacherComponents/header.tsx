@@ -25,24 +25,11 @@ const Header: React.FC<HeaderProps> = ({ teacher, teacherProfile }) => {
     return name.split(' ').map(n => n[0]).join('').toUpperCase();
   };
 
-<<<<<<< HEAD
   const formatCurrency = (amount: number | undefined) => {
-    // Ensure amount is a number and not undefined or null
-=======
-  const formatCurrency = (amount: number) => {
->>>>>>> a27505c68686d606cd7863d0cd73ed8724ccd717
     return new Intl.NumberFormat().format(amount || 0);
   };
 
   const getVerificationStatus = () => {
-<<<<<<< HEAD
-    // Check if teacherProfile exists first
-    if (!teacherProfile) {
-      return 'unknown';
-    }
-    
-=======
->>>>>>> a27505c68686d606cd7863d0cd73ed8724ccd717
     const isVerified = teacherProfile.isVerified !== undefined 
       ? teacherProfile.isVerified 
       : teacherProfile.is_verified;
@@ -73,24 +60,11 @@ const Header: React.FC<HeaderProps> = ({ teacher, teacherProfile }) => {
         <div className="flex flex-col items-center">
           {/* Profile Photo - Overlapping */}
           <Avatar className="h-24 w-24 border-2 border-white shadow-md mb-3">
-<<<<<<< HEAD
-            {teacher.avatar ? (
-              <AvatarImage 
-                src={formatAvatarUrl(teacher.avatar)} 
-                alt={teacher.name} 
-                className="object-cover"
-                onError={(e) => {
-                  e.currentTarget.style.display = 'none';
-                }}
-              />
-            ) : null}
-=======
             <AvatarImage 
               src={formatAvatarUrl(teacher.avatar)} 
               alt={teacher.name} 
               className="object-cover"
             />
->>>>>>> a27505c68686d606cd7863d0cd73ed8724ccd717
             <AvatarFallback className="bg-primary/10 text-primary text-xl">
               {getInitials(teacher.name)}
             </AvatarFallback>
@@ -199,11 +173,7 @@ const Header: React.FC<HeaderProps> = ({ teacher, teacherProfile }) => {
                 </div>
                 {/* Amount */}
                 <span className="text-base text-black font-bold leading-tight break-words ml-1">
-<<<<<<< HEAD
-                  #{formatCurrency(teacherProfile?.wallet_balance || 0)}
-=======
                   #{formatCurrency(teacherProfile.wallet_balance || 0)}
->>>>>>> a27505c68686d606cd7863d0cd73ed8724ccd717
                 </span>
               </div>
               <div className="text-xs text-gray-500">Wallet Balance</div>
@@ -245,11 +215,7 @@ const Header: React.FC<HeaderProps> = ({ teacher, teacherProfile }) => {
                 </div>
                 {/* Amount */}
                 <span className="text-base text-black font-bold leading-tight break-words ml-1">
-<<<<<<< HEAD
-                  #{formatCurrency(teacherProfile?.total_earned || 0)}
-=======
                   #{formatCurrency(teacherProfile.total_earned || 0)}
->>>>>>> a27505c68686d606cd7863d0cd73ed8724ccd717
                 </span>
               </div>
               <div className="text-xs text-gray-500">Total Earned</div>
@@ -271,22 +237,14 @@ const Header: React.FC<HeaderProps> = ({ teacher, teacherProfile }) => {
                 </div>
                 {/* Amount */}
                 <span className="text-base text-black font-bold leading-tight break-words ml-1">
-<<<<<<< HEAD
-                  #{formatCurrency(teacherProfile?.pending_payouts || 0)}
-=======
                   #{formatCurrency(teacherProfile.pending_payouts || 0)}
->>>>>>> a27505c68686d606cd7863d0cd73ed8724ccd717
                 </span>
               </div>
               <div className="text-xs text-gray-500">Pending Payouts</div>
             </div>
           </div>
           <div className="text-right">
-<<<<<<< HEAD
             <a href={`/admin/teachers/${teacher.id}/earnings`} className="text-xs text-blue-500 hover:underline">
-=======
-            <a href={`/teacher/earnings/${teacher.id}`} className="text-xs text-blue-500 hover:underline">
->>>>>>> a27505c68686d606cd7863d0cd73ed8724ccd717
               View Teacher Earnings
             </a>
           </div>
