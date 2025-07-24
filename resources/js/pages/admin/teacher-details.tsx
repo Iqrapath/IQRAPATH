@@ -4,7 +4,6 @@ import AdminLayout from '@/layouts/admin-layout';
 import About from './teacherComponents/about';
 import { AboutEditData } from './teacherComponents/AboutEditModal';
 import SubjectsSpecializations from './teacherComponents/subjects-specializations';
-import SubjectSpecializationEditModal, { SubjectSpecializationData, AvailabilitySchedule } from './teacherComponents/SubjectSpecializationEditModal';
 import ContactInfo from './teacherComponents/contact-info';
 import ContactInfoEditModal, { ContactInfoEditData } from './teacherComponents/ContactInfoEditModal';
 import PerformanceStats from './teacherComponents/performance-stats';
@@ -312,13 +311,13 @@ export default function TeacherDetails({
           />
         </div>
 
-        <SubjectSpecializationEditModal
+        {/* <SubjectSpecializationEditModal
           isOpen={showEditSubjectsModal}
           onClose={() => setShowEditSubjectsModal(false)}
           onSave={() => {}}
           initialData={initialSubjectData}
           teacherId={teacher.id}
-        />
+        /> */}
 
         <div className="mt-6 shadow-xl">
           <Documents
